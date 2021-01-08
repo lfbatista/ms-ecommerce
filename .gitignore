@@ -1,0 +1,13 @@
+*.sqlite
+*.pyc
+__pycache__/
+.coverage
+.coveragerc
+.dbdata
+.desc
+.idea
+db*
+htmlcov
+imports.log
+migrations/
+env
