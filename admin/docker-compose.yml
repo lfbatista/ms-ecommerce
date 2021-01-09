@@ -33,23 +33,23 @@ services:
     ports:
       - 33066:3306
 
-#  dockerhost:
-#    image: qoomon/docker-host
-#    cap_add:
-#      - NET_ADMIN
-#      - NET_RAW
-#    restart: on-failure
-#    networks:
-#      - backend
-#
-#  tcp_message_emitter:
-#    image: alpine
-#    depends_on:
-#      - dockerhost
-#    command: [ "sh", "-c", "while :; do date; sleep 1; done | nc 'dockerhost' 2323 -v"]
-#    networks:
-#      - backend
-#
-#networks:
-#  backend:
-#    driver: bridge
+  dockerhost:
+    image: qoomon/docker-host
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    restart: on-failure
+    networks:
+      - backend
+
+  tcp_message_emitter:
+    image: alpine
+    depends_on:
+      - dockerhost
+    command: [ "sh", "-c", "while :; do date; sleep 1; done | nc 'dockerhost' 2323 -v"]
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
