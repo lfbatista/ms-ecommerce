@@ -5,6 +5,11 @@ services:
       context: .
       dockerfile: Dockerfile
     command: "python main.py"
+    networks:
+      internal:
+      shared:
+        aliases:
+        - flask-backend
     ports:
       - 8001:5000
     volumes:
@@ -13,6 +18,8 @@ services:
       - db
 
   queue:
+    networks:
+      - internal
     build:
       context: .
       dockerfile: Dockerfile
@@ -23,6 +30,8 @@ services:
   db:
     image: mysql:5.7.22
     restart: always
+    networks:
+      - internal
     environment:
       MYSQL_DATABASE: main
       MYSQL_USER: root
@@ -33,15 +42,8 @@ services:
     ports:
       - 33067:3306
 
-#  dockerhost:
-#    image: qoomon/docker-host
-#    cap_add:
-#      - NET_ADMIN
-#      - NET_RAW
-#    restart: on-failure
-#    networks:
-#      - backend
-#
-#networks:
-#  backend:
-#    driver: bridge
+networks:
+  internal:
+  shared:
+    external: true
+    name: admin_shared

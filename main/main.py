@@ -42,11 +42,11 @@ def index():
 
 @app.route("/api/products/<int:id>/like", methods=["POST"])
 def like(id):
-    req = requests.get("http://172.17.0.1:8000/api/user")
+    req = requests.get("http://django-backend:8000/api/user")
     json = req.json()
 
     try:
-        product_user = ProductUser(user_id=json["id"], product=id)
+        product_user = ProductUser(user_id=json["id"], product_id=id)
         db.session.add(product_user)
         db.session.commit()
 

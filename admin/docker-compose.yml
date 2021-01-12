@@ -11,6 +11,11 @@ services:
       - .:/app
     depends_on:
       - db
+    networks:
+      internal:
+      shared:
+        aliases:
+          - django-backend
 
   queue:
     build:
@@ -19,6 +24,8 @@ services:
     command: "python consumer.py"
     depends_on:
       - db
+    networks:
+      - internal
 
   db:
     image: mysql:5.7.22
@@ -32,24 +39,9 @@ services:
       - .dbdata:/var/lib/mysql
     ports:
       - 33066:3306
-
-  dockerhost:
-    image: qoomon/docker-host
-    cap_add:
-      - NET_ADMIN
-      - NET_RAW
-    restart: on-failure
     networks:
-      - backend
-
-  tcp_message_emitter:
-    image: alpine
-    depends_on:
-      - dockerhost
-    command: [ "sh", "-c", "while :; do date; sleep 1; done | nc 'dockerhost' 2323 -v"]
-    networks:
-      - backend
+      - internal
 
 networks:
-  backend:
-    driver: bridge
+  internal:
+  shared:
